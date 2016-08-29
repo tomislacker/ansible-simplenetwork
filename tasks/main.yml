@@ -14,6 +14,6 @@
     mode=0644
     owner=root
     group=root
-  with_dict: deb_network
+  with_dict: "{{ deb_network }}"
 
 # vim ft=ansible

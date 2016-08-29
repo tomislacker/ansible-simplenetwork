@@ -7,4 +7,13 @@
     owner=root
     group=root
 
+- name: Set interfaces up
+  template:
+    src=interface.j2
+    dest=/etc/network/interfaces.d/{{ item.key }}
+    mode=0644
+    owner=root
+    group=root
+  with_dict: deb_network
+
 # vim ft=ansible

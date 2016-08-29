@@ -1,0 +1,19 @@
+auto {{ item.key }}
+iface {{ item.key }} inet {{ item.value.inet }}
+{% for k, v in item.value.iteritems() %}
+  # {{ k }}     {{ v }}
+{% endfor %}
+  address   {{ item.value.address }}
+  netmask   {{ item.value.netmask }}
+{% if item.value.network is defined %}
+  network   {{ item.value.network }}
+{% endif %}
+{% if item.value.gateway is defined %}
+  gateway   {{ item.value.gateway }}
+{% endif %}
+{% if item.value.broadcast is defined %}
+  broadcast {{ item.value.broadcast }}
+{% endif %}
+{% if item.value.extra is defined %}
+  # Show other stuff
+{% endif %}

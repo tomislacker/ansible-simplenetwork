@@ -3,6 +3,7 @@ iface {{ item.key }} inet {{ item.value.inet }}
 {% for k, v in item.value.iteritems() %}
   # {{ k }}     {{ v }}
 {% endfor %}
+{% if item.value.address is defined %}
   address   {{ item.value.address }}
   netmask   {{ item.value.netmask }}
 {% if item.value.network is defined %}
@@ -13,6 +14,10 @@ iface {{ item.key }} inet {{ item.value.inet }}
 {% endif %}
 {% if item.value.broadcast is defined %}
   broadcast {{ item.value.broadcast }}
+{% endif %}
+{% elif item.value.inet == "manual" %}
+  post-up ip link set dev $IFACE up
+  pre-down ip link set dev $IFACE down
 {% endif %}
 {% if item.value.extra is defined %}
   # Show other stuff

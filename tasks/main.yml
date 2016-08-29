@@ -1,0 +1,10 @@
+---
+- name: Set generic network/interfaces
+  template:
+    src=interfaces.j2
+    dest=/etc/network/interfaces
+    mode=0644
+    owner=root
+    group=root
+
+# vim ft=ansible

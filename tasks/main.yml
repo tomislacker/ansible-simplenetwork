@@ -1,16 +1,8 @@
 ---
-- name: Set generic network/interfaces
-  template:
-    src=interfaces.j2
-    dest=/etc/network/interfaces
-    mode=0644
-    owner=root
-    group=root
-
 - name: Set interfaces up
   template:
     src=interface.j2
-    dest=/etc/network/interfaces.d/{{ item.key }}
+    dest=/etc/network/interfaces.d/{{ item.key }}.cfg
     mode=0644
     owner=root
     group=root

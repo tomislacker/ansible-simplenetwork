@@ -24,6 +24,12 @@
     - kernel
     - networking
 
+- name: Set VLAN name type
+  command: /sbin/vconfig set_name_type {{ vlan_name_type }}
+  tags:
+    - kernel
+    - networking
+
 - name: Set interfaces up
   template:
     src=interface.j2

@@ -1,0 +1,4 @@
+---
+vlan_name_type: DEV_PLUS_VID_NO_PAD
+
+# vim ft=ansible

@@ -31,16 +31,30 @@
     - kernel
     - networking
 
-- name: Set interfaces up
+- name: Set blank /etc/network/interfaces file
+  template:
+    src=interfaces.j2
+    dest=/etc/network/interfaces
+    mode=0644
+    owner=root
+    group=root
+
+- name: Define networking parameters
   template:
     src=interface.j2
     dest=/etc/network/interfaces.d/{{ item.key }}.cfg
     mode=0644
     owner=root
     group=root
+  register: iface_result
   with_dict: "{{ deb_network }}"
   tags:
     - config
     - networking
+
+- name: Cycle network interfaces
+  shell: ifdown {{ item.item.key }}; ifup {{ item.item.key }}
+  with_items: "{{ iface_result.results }}"
+  when: iface_result is defined and item.changed
 
 # vim ft=ansible

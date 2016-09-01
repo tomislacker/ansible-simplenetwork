@@ -20,5 +20,7 @@ iface {{ item.key }} inet {{ item.value.inet }}
   pre-down ip link set dev $IFACE down
 {% endif %}
 {% if item.value.extra is defined %}
-  # Show other stuff
+{% for k, v in item.value.extra.iteritems() %}
+  {{ k }} {{ v }}
+{% endfor %}
 {% endif %}

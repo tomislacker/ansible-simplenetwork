@@ -1,4 +1,29 @@
 ---
+- name: Install networking packages
+  apt: name={{ item }}
+       state=present
+  with_items:
+    - bridge-utils
+    - vlan
+  tags:
+    - packages
+    - networking
+
+- name: Load 8021q module at runtime
+  modprobe: name=8021q state=present
+  tags:
+    - kernel
+    - networking
+
+- name: Load 8021q module at boot time
+  lineinfile: dest=/etc/modules
+              state=present
+              line=8021q
+              regexp='^8021q\s*(#.*)?$'
+  tags:
+    - kernel
+    - networking
+
 - name: Set interfaces up
   template:
     src=interface.j2
@@ -7,5 +32,8 @@
     owner=root
     group=root
   with_dict: "{{ deb_network }}"
+  tags:
+    - config
+    - networking
 
 # vim ft=ansible

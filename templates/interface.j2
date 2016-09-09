@@ -1,8 +1,12 @@
+#jinja2:lstrip_blocks: True
 auto {{ item.key }}
+{% if in item.value.address is defined %}
+iface {{ item.key }} inet static
+{% elif item.value.dhcp is defined %}
+iface {{ item.key }} inet dhcp
+{% else %}
 iface {{ item.key }} inet {{ item.value.inet }}
-{% for k, v in item.value.iteritems() %}
-  # {{ k }}     {{ v }}
-{% endfor %}
+{% endif %}
 {% if item.value.address is defined %}
   address   {{ item.value.address }}
   netmask   {{ item.value.netmask }}
@@ -15,7 +19,7 @@ iface {{ item.key }} inet {{ item.value.inet }}
 {% if item.value.broadcast is defined %}
   broadcast {{ item.value.broadcast }}
 {% endif %}
-{% elif item.value.inet == "manual" %}
+{% if item.value.address is not defined and item.value.dhcp is not defined %}
   post-up ip link set dev $IFACE up
   pre-down ip link set dev $IFACE down
 {% endif %}

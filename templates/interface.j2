@@ -1,12 +1,6 @@
 #jinja2:lstrip_blocks: True
 auto {{ item.key }}
-{% if in item.value.address is defined %}
-iface {{ item.key }} inet static
-{% elif item.value.dhcp is defined %}
-iface {{ item.key }} inet dhcp
-{% else %}
-iface {{ item.key }} inet {{ item.value.inet }}
-{% endif %}
+iface {% if item.value.vid | default(False) %}brvlan{{ item.value.vid }}{% else %}{{ item.key }}{% endif %} inet {% if item.value.address %}static{% else %}manual{% endif %}
 {% if item.value.address is defined %}
   address   {{ item.value.address }}
   netmask   {{ item.value.netmask }}

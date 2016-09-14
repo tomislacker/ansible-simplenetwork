@@ -1,24 +1,47 @@
 #jinja2:lstrip_blocks: True
 auto {{ item.key }}
 iface {% if item.value.vid | default(False) %}brvlan{{ item.value.vid }}{% else %}{{ item.key }}{% endif %} inet {% if item.value.address %}static{% else %}manual{% endif %}
+
 {% if item.value.address is defined %}
   address   {{ item.value.address }}
   netmask   {{ item.value.netmask }}
-{% if item.value.network is defined %}
+  {% if item.value.network is defined %}
   network   {{ item.value.network }}
-{% endif %}
-{% if item.value.gateway is defined %}
+  {% endif %}
+  {% if item.value.gateway is defined %}
   gateway   {{ item.value.gateway }}
-{% endif %}
-{% if item.value.broadcast is defined %}
+  {% endif %}
+  {% if item.value.broadcast is defined %}
   broadcast {{ item.value.broadcast }}
-{% endif %}
-{% if item.value.address is not defined and item.value.dhcp is not defined %}
+  {% endif %}
+  {% if item.value.address is not defined and item.value.dhcp is not defined %}
   post-up ip link set dev $IFACE up
   pre-down ip link set dev $IFACE down
+  {% endif %}
 {% endif %}
+{% if item.value.vid | default(False) %}bridge_ports
+  {%- if item.value.tagged | default(False) %}{% for tif in item.value.tagged %} {{ tif }}.{{ item.value.vid }}{% endfor %}{% endif %}
+  {%- if item.value.untagged | default(False) %}{% for utif in item.value.untagged %} {{ utif }}{% endfor %}{% endif %}
+{%- endif %}
+
 {% if item.value.extra is defined %}
 {% for k, v in item.value.extra.iteritems() %}
   {{ k }} {{ v }}
 {% endfor %}
+{% endif %}
+
+{# Define any VLAN bridge members to ensure their ifaces are up and IP addrs are flushed#}
+{% if item.value.vid | default(False) %}
+  {% if item.value.tagged | default(False) %}{% for if in item.value.tagged %}
+iface {{ if }} inet manual
+  post-up ip link set dev $IFACE up
+  post-up ip addr flush dev $IFACE
+  pre-down ip link set dev $IFACE down
+  {% endfor %}{% endif %}
+  {% if item.value.untagged | default(False) %}{% for if in item.value.untagged %}
+iface {{ if }} inet manual
+  post-up ip link set dev $IFACE up
+  post-up ip addr flush dev $IFACE
+  pre-down ip link set dev $IFACE down
+  {% endfor %}{% endif %}
 {% endif %}

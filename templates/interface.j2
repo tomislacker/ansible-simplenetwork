@@ -1,5 +1,6 @@
 #jinja2:lstrip_blocks: True
 auto {{ item.key }}
+# {{ item.value.desc | default('No description') }}
 iface {% if item.value.vid | default(False) %}brvlan{{ item.value.vid }}{% else %}{{ item.key }}{% endif %} inet {% if item.value.address %}static{% else %}manual{% endif %}
 
 {% if item.value.address is defined %}

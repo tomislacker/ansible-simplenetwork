@@ -4,7 +4,13 @@
        state=present
   with_items:
     - bridge-utils
+    - bwm-ng
+    - dhcpdump
     - ifupdown
+    - iproute2
+    - iptraf-ng
+    - nmap
+    - tcpdump
     - vlan
   tags:
     - packages

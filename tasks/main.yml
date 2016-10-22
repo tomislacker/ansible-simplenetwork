@@ -1,4 +1,7 @@
 ---
+- fail: msg="Missing 'deb_network' variable"
+  when: deb_network is undefined
+
 - name: Install networking packages
   apt: name={{ item }}
        state=present

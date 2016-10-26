@@ -62,7 +62,7 @@
     - networking
 
 - name: Cycle network interfaces
-  shell: ifdown {{ item.item.key }}; ifup {{ item.item.key }}
+  shell: (timeout {{ iface_cycle_timeout.ifdown }} ifdown {{ item.item.key }}; timeout {{ iface_cycle_timeout.ifup }} ifup {{ item.item.key }}) || /bin/true
   with_items: "{{ iface_result.results }}"
   when: iface_result is defined and item.changed
 

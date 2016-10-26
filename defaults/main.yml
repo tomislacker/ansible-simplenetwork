@@ -1,4 +1,8 @@
 ---
 vlan_name_type: DEV_PLUS_VID_NO_PAD
 
+iface_cycle_timeout:
+  ifdown: 10
+  ifup: 10
+
 # vim ft=ansible

@@ -5,4 +5,4 @@ iface_cycle_timeout:
   ifdown: 10
   ifup: 10
 
-# vim ft=ansible
+# vim: ft=ansible

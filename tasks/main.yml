@@ -66,4 +66,4 @@
   with_items: "{{ iface_result.results }}"
   when: iface_result is defined and item.changed
 
-# vim ft=ansible
+# vim: ft=ansible
